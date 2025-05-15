@@ -25,3 +25,5 @@ down-dev:
 
 migrate-dev:
 	docker-compose -f docker-compose.dev.yml exec django python manage.py makemigrations signalp
+
+# usage example: make build-dev

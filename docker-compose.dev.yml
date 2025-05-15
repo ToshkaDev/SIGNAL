@@ -19,10 +19,7 @@ services:
   postgres:
     image: postgres:16
     restart: always
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    env_file: .env.dev
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
