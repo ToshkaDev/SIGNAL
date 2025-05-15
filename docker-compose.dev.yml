@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file: .env.dev
+    command: sh ./start.sh
+    volumes:
+      - .:/app  # hot-reload volume
+      - static_volume:/app/static
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
+
+
+
