@@ -22,3 +22,6 @@ up-dev:
 
 down-dev:
 	docker-compose -f docker-compose.dev.yml down
+
+migrate-dev:
+	docker-compose -f docker-compose.dev.yml exec django python manage.py makemigrations signalp
