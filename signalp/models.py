@@ -1,6 +1,6 @@
 from django.db import models
 
-class MistGenomeMetadata(models.Model):
+class GenomeMetadata(models.Model):
     genome_version = models.CharField(max_length=100, unique=True)
     genome_accession = models.CharField(max_length=100, blank=True, null=True)
     genome_size = models.IntegerField(blank=True, null=True)
@@ -33,13 +33,17 @@ class ProteinType(models.TextChoices):
     RR = 'rr', 'Response Regulator'
     OCS = 'ocs', 'One-Component System'
 
+class Source(models.TextChoices):
+    MIST = 'mist', 'MiST database'
+    RMODELS = 'rmodels', 'Pfam models with relaxed thresholds'
 
-class MistDomainStatisticsPerProtein(models.Model):
-    genome = models.ForeignKey(MistGenomeMetadata, to_field='genome_version', on_delete=models.CASCADE)
+class DomainStatisticsPerProtein(models.Model):
+    genome = models.ForeignKey(GenomeMetadata, to_field='genome_version', on_delete=models.CASCADE)
     genome_accession = models.CharField(max_length=100, blank=True, null=True)
     ncbi_protein_accession = models.CharField(max_length=100, blank=True, null=True)
     mist_protein_accession = models.CharField(max_length=100, unique=True)
     protein_type = models.CharField(max_length=3, choices=ProteinType.choices)
+    source =  models.CharField(max_length=7, choices=Source.choices)
     protein_length = models.IntegerField(blank=True, null=True)
     domain_architecture = models.TextField(blank=True, null=True)
     sensors_or_regulators = models.TextField(blank=True, null=True)
@@ -55,9 +59,10 @@ class DomainCombinationType(models.TextChoices):
     superfamily = 'superfamily'
     superfamily_comb = 'superfamily_comb'
 
-class MistDomainStatisticsPerGenome(models.Model):
-    genome = models.ForeignKey(MistGenomeMetadata, to_field='genome_version', on_delete=models.CASCADE)
+class DomainStatisticsPerGenome(models.Model):
+    genome = models.ForeignKey(GenomeMetadata, to_field='genome_version', on_delete=models.CASCADE)
     genome_accession = models.CharField(max_length=100, blank=True, null=True)
+    source =  models.CharField(max_length=7, choices=Source.choices)
     protein_type = models.CharField(max_length=3, choices=ProteinType.choices)
     domains = models.TextField()
     domain_combination_type = models.TextField(blank=True, null=True, choices=DomainCombinationType.choices)
@@ -69,10 +74,11 @@ class MistDomainStatisticsPerGenome(models.Model):
         unique_together = ('genome', 'protein_type', 'domains')
 
 
-class MistDomainStatisticsPerTaxon(models.Model):
+class DomainStatisticsPerTaxon(models.Model):
     gtdb_taxonomy_string = models.TextField()
     gtdb_taxonomy_last = models.CharField(max_length=100)
     gtdb_taxonomy_rank = models.CharField(max_length=20, blank=True, null=True)
+    source =  models.CharField(max_length=7, choices=Source.choices)
     protein_type = models.CharField(max_length=3, choices=ProteinType.choices)
     domains = models.TextField()
     domain_combination_type = models.TextField(blank=True, null=True)
@@ -82,8 +88,8 @@ class MistDomainStatisticsPerTaxon(models.Model):
     count_normalized_by_total_proteins_by_total_genomes = models.DecimalField(max_digits=10, decimal_places=5, blank=True, null=True)
 
     genomes = models.ManyToManyField(
-        "MistGenomeMetadata",
-        through="MistTaxonGenomeLink",
+        "GenomeMetadata",
+        through="TaxonGenomeLink",
         related_name="mist_taxon_statistics"
     )
 
@@ -91,6 +97,6 @@ class MistDomainStatisticsPerTaxon(models.Model):
         unique_together = ('gtdb_taxonomy_string', 'protein_type', 'domains')
 
 
-class MistTaxonGenomeLink(models.Model):
-    taxon = models.ForeignKey(MistDomainStatisticsPerTaxon, on_delete=models.CASCADE)
-    genome = models.ForeignKey(MistGenomeMetadata, on_delete=models.CASCADE)
+class TaxonGenomeLink(models.Model):
+    taxon = models.ForeignKey(DomainStatisticsPerTaxon, on_delete=models.CASCADE)
+    genome = models.ForeignKey(GenomeMetadata, on_delete=models.CASCADE)
