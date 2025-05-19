@@ -27,14 +27,13 @@ class GenomeMetadata(models.Model):
     def __str__(self):
         return self.genome_version
 
-
 class ProteinType(models.TextChoices):
-    HK = 'HK', 'Histidine Kinase'
+    HK = 'hk', 'Histidine Kinase'
     RR = 'rr', 'Response Regulator'
-    OCS = 'ocs', 'One-Component System'
+    OCP = 'ocp', 'One-Component System'
 
 class Source(models.TextChoices):
-    MIST = 'mist', 'MiST database'
+    MIST = 'mistdb', 'MiST database'
     RMODELS = 'rmodels', 'Pfam models with relaxed thresholds'
 
 class DomainStatisticsPerProtein(models.Model):
@@ -73,7 +72,6 @@ class DomainStatisticsPerGenome(models.Model):
     class Meta:
         unique_together = ('genome', 'protein_type', 'domains')
 
-
 class DomainStatisticsPerTaxon(models.Model):
     gtdb_taxonomy_string = models.TextField()
     gtdb_taxonomy_last = models.CharField(max_length=100)
@@ -95,7 +93,6 @@ class DomainStatisticsPerTaxon(models.Model):
 
     class Meta:
         unique_together = ('gtdb_taxonomy_string', 'protein_type', 'domains')
-
 
 class TaxonGenomeLink(models.Model):
     taxon = models.ForeignKey(DomainStatisticsPerTaxon, on_delete=models.CASCADE)
