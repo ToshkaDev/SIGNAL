@@ -26,4 +26,14 @@ down-dev:
 migrate-dev:
 	docker-compose -f docker-compose.dev.yml exec django python manage.py makemigrations signalp
 
+load_genome_metadata-dev:
+	docker-compose -f docker-compose.dev.yml exec django python manage.py load_genome_metadata
+
+load_per_genome_stats-dev:
+	docker-compose -f docker-compose.dev.yml exec django python manage.py load_per_genome_stats
+
+# With optional --file param:
+#load-dev:
+#	docker-compose -f docker-compose.dev.yml exec django python manage.py load_genome_metadata.py --file path/to/file.tsv
+
 # usage example: make build-dev

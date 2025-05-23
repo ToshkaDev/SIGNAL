@@ -1,3 +1,6 @@
+.env.prod
+signalp/loaders/input/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -172,6 +175,3 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
-
-
-.env.prod
