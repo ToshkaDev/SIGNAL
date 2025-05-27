@@ -38,23 +38,27 @@ def load_domain_statistics_per_genome(file_path=None, batch_size=1000):
         reader = csv.DictReader(tsvfile, delimiter='\t')
         for row_num, row in enumerate(reader, start=1):
             genome_version = row.get("genome")
+            source = row.get("source")
             protein_type = row.get("protein_type")
             domains = row.get("domains")
+            domain_combination_type = row.get("domain_combination_type")
 
-            if not genome_version or not protein_type or not domains:
+            if not genome_version or not source or not protein_type or not domains or not domain_combination_type:
                 logger.warning(f"Skipping row {row_num} due to missing required fields: {row}")
                 continue
-
-            unique_keys.add((genome_version, protein_type, domains))
+            
+            unique_keys.add((genome_version, source, protein_type, domains, domain_combination_type))
             genome_versions.add(genome_version)
             rows.append(row)
 
+    # We extracting genome versions from the metadat table to ensure by comparision with this data that
+    # all per_genome_stats entries have genomes associated with them in the genome_metadata table (see below "Check existance" during loading data)
     genome_map = {gm.genome_version: gm for gm in GenomeMetadata.objects.filter(genome_version__in=genome_versions)}
     existing_qs = DomainStatisticsPerGenome.objects.filter(
         genome__genome_version__in=genome_versions
     )
     existing_map = {
-        (obj.genome.genome_version, obj.protein_type, obj.domains): obj
+        (obj.genome.genome_version, obj.source, obj.protein_type, obj.domains, obj.domain_combination_type): obj
         for obj in existing_qs
     }
 
@@ -63,11 +67,12 @@ def load_domain_statistics_per_genome(file_path=None, batch_size=1000):
 
     for row in rows:
         genome = genome_map.get(row["genome"])
+        # Check existance: load records only if associated genomes are present in the genome_metadata table
         if not genome:
             logger.warning(f"Skipping row with unknown genome: {row['genome']}")
             continue
 
-        key = (row["genome"], row["protein_type"], row["domains"])
+        key = (row["genome"], row["source"], row["protein_type"], row["domains"], row["domain_combination_type"])
         defaults = {
             "genome": genome,
             "genome_accession": row.get("genome_accession"),

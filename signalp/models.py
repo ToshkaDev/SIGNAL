@@ -89,7 +89,7 @@ class DomainStatisticsPerGenome(models.Model):
     objects = FullTextSearchQuerySet.as_manager()
 
     class Meta:
-        unique_together = ('genome', 'protein_type', 'domains')
+        unique_together = ('genome', 'source', 'protein_type', 'domains', 'domain_combination_type')
         indexes = [
             GinIndex(fields=['search_vector'], name='search_vector_genome_idx')
         ]
