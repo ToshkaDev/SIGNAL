@@ -1,4 +1,4 @@
-genome_version	genome_accession	genome_size	protein_count	gtdb_kingdom	gtdb_phylum	gtdb_class	gtdb_order	gtdb_family	gtdb_genus	gtdb_species	ncbi_kingdom	ncbi_phylum	ncbi_class	ncbi_order	ncbi_family	ncbi_genus	ncbi_species
+genome	genome_accession	ncbi_protein_accession	mist_protein_accession	protein_type	source	protein_length	domain_architecture	sensors_or_regulators	domain_counts	domains
 GCF_000006805.1	GCF_000006805	WP_012289455.1	GCF_000006805.1-VNG_RS08490	hk	mistdb	555	HisKA_7TM:15-235,hole:236-343,HisKA:344-412	HisKA_7TM	HisKA:1,HisKA_7TM:1,hole:1	HisKA,HisKA_7TM,hole
 GCF_000006805.1	GCF_000006805	WP_010903499.1	GCF_000006805.1-VNG_RS07895	hk	mistdb	506	PAS_4:28-140,GAF_2:158-291,HisKA:305-365,HATPase_c:403-506	PAS_4,GAF_2	GAF_2:1,HATPase_c:1,HisKA:1,PAS_4:1	GAF_2,HATPase_c,HisKA,PAS_4
 GCF_000006805.1	GCF_000006805	WP_010902998.1	GCF_000006805.1-VNG_RS05360	hk	mistdb	444	hole:1-289,HATPase_c_2:290-437	nodomain	HATPase_c_2:1,hole:1	HATPase_c_2,hole

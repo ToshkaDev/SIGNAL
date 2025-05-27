@@ -31,8 +31,6 @@ def load_genome_metadata_from_tsv(file_path=None, batch_size=1000):
         raise FileNotFoundError(f"File {file_path} does not exist")
 
     rows = []
-    # to track existing keys (genome_version)
-    keys = set()
     genome_versions = set()
 
     # Read all rows first
@@ -45,7 +43,6 @@ def load_genome_metadata_from_tsv(file_path=None, batch_size=1000):
                 continue
             genome_versions.add(genome_version)
             rows.append(row)
-            keys.add(genome_version)
 
     # Fetch existing GenomeMetadata records
     existing_gs = GenomeMetadata.objects.filter(genome_version__in=genome_versions)
