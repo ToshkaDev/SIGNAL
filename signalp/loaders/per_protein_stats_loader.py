@@ -16,12 +16,6 @@ def safe_int(value):
     except (ValueError, TypeError):
         return None
 
-def safe_decimal(value):
-    try:
-        return Decimal(value)
-    except (InvalidOperation, ValueError, TypeError):
-        return None
-
 def load_domain_statistics_per_protein(file_path=None, batch_size=1000):
     if file_path is None:
         file_path = FILE_PATH
@@ -48,8 +42,8 @@ def load_domain_statistics_per_protein(file_path=None, batch_size=1000):
             genome_versions.add(genome_version)
             rows.append(row)
 
-    # We extracting genome versions from the metadat table to ensure by comparision with this data that
-    # all per_genome_stats entries have genomes associated with them in the genome_metadata table (see below "Check existance" during loading data)
+    # We are extracting genome versions from the metadat table to ensure by comparision with this data that
+    # all DomainStatisticsPerProtein entries have genomes associated with them in the genome_metadata table (see below "Check existance" during loading data)
     genome_map = {gm.genome_version: gm for gm in GenomeMetadata.objects.filter(genome_version__in=genome_versions)}
     existing_entries = DomainStatisticsPerProtein.objects.filter(genome__genome_version__in=genome_versions)
     existing_map = { obj.mist_protein_accession: obj for obj in existing_entries }

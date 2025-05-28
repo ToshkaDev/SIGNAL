@@ -40,12 +40,22 @@ LOGGING = {
     'loggers': {
         'signalp.management.commands.load_genome_metadata': {
             'handlers': ['console'],
-            'level': 'WARNING',
+            'level': 'INFO',
             'propagate': False,
         },
         'signalp.management.commands.load_per_genome_stats': {
             'handlers': ['console'],
-            'level': 'WARNING',
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'signalp.management.commands.load_per_protein_stats': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'signalp.management.commands.load_per_taxon_stats': {
+            'handlers': ['console'],
+            'level': 'INFO',
             'propagate': False,
         },
     },

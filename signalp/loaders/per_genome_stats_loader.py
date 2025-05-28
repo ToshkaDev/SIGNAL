@@ -52,12 +52,10 @@ def load_domain_statistics_per_genome(file_path=None, batch_size=1000):
     # We extracting genome versions from the metadat table to ensure by comparision with this data that
     # all per_genome_stats entries have genomes associated with them in the genome_metadata table (see below "Check existance" during loading data)
     genome_map = {gm.genome_version: gm for gm in GenomeMetadata.objects.filter(genome_version__in=genome_versions)}
-    existing_qs = DomainStatisticsPerGenome.objects.filter(
-        genome__genome_version__in=genome_versions
-    )
+    existing_entires = DomainStatisticsPerGenome.objects.filter(genome__genome_version__in=genome_versions)
     existing_map = {
         (obj.genome.genome_version, obj.source, obj.protein_type, obj.domains, obj.domain_combination_type): obj
-        for obj in existing_qs
+        for obj in existing_entires
     }
 
     to_create = []
@@ -75,8 +73,8 @@ def load_domain_statistics_per_genome(file_path=None, batch_size=1000):
             "genome": genome,
             "genome_accession": row.get("genome_accession"),
             "source": row.get("source"),
-            "protein_type": row["protein_type"],
-            "domains": row["domains"],
+            "protein_type": row.get("protein_type"),
+            "domains": row.get("domains"),
             "domain_combination_type": row.get("domain_combination_type"),
             "count_raw": safe_int(row.get("count_raw")),
             "count_normalized_by_genome_size": safe_decimal(row.get("count_normalized_by_genome_size")),

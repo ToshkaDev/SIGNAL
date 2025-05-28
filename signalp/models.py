@@ -116,7 +116,7 @@ class DomainStatisticsPerTaxon(models.Model):
     )
 
     class Meta:
-        unique_together = ('gtdb_taxonomy_string', 'protein_type', 'domains')
+        unique_together = ('gtdb_taxonomy_string', 'source', 'protein_type', 'domains', 'domain_combination_type')
         indexes = [
             GinIndex(fields=['search_vector'], name='search_vector_taxon_idx')
         ]
