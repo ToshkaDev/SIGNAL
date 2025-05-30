@@ -103,7 +103,7 @@ def load_domain_statistics_per_taxon(file_path=None, batch_size=1000):
 
     with transaction.atomic():
         for i in range(0, len(to_update), batch_size):
-            DomainStatisticsPerTaxon.objects.bulk_update(
+            taxon_stat, created = DomainStatisticsPerTaxon.objects.bulk_update(
                 to_update[i:i + batch_size],
                 fields=[
                     "gtdb_taxonomy_string",

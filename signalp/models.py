@@ -46,7 +46,7 @@ class FullTextSearchQuerySet(models.QuerySet):
         return self.annotate(rank=SearchRank(F('search_vector'), query)).filter(search_vector=query).order_by('-rank')
 
 class DomainStatisticsPerProtein(models.Model):
-    genome = models.ForeignKey(GenomeMetadata, to_field='genome_version', on_delete=models.CASCADE)
+    genome = models.ForeignKey(GenomeMetadata, to_field='genome_version', related_name='domain_statistics_perprotein', on_delete=models.CASCADE)
     genome_accession = models.CharField(max_length=100, blank=True, null=True)
     ncbi_protein_accession = models.CharField(max_length=100, blank=True, null=True, db_index=True)
     mist_protein_accession = models.CharField(max_length=100, unique=True, db_index=True)
@@ -76,7 +76,7 @@ class DomainCombinationType(models.TextChoices):
     superfamily_comb = 'superfamily_comb'
 
 class DomainStatisticsPerGenome(models.Model):
-    genome = models.ForeignKey(GenomeMetadata, to_field='genome_version', on_delete=models.CASCADE)
+    genome = models.ForeignKey(GenomeMetadata, to_field='genome_version', related_name='domain_statistics_pergenome', on_delete=models.CASCADE)
     genome_accession = models.CharField(max_length=100, blank=True, null=True)
     source =  models.CharField(max_length=7, choices=Source.choices, db_index=True)
     protein_type = models.CharField(max_length=3, choices=ProteinType.choices, db_index=True)
