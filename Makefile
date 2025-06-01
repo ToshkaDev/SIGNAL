@@ -36,9 +36,11 @@ load_per_protein_stats-dev:
 	docker-compose -f docker-compose.dev.yml exec django python manage.py load_per_protein_stats
 
 load_per_taxon_stats-dev:
-	docker-compose -f docker-compose.dev.yml exec django python manage.py load_per_taxon_stats	
+	docker-compose -f docker-compose.dev.yml exec django python manage.py load_per_taxon_stats
+		
 # With optional --file param:
 #load-dev:
 #	docker-compose -f docker-compose.dev.yml exec django python manage.py load_genome_metadata.py --file path/to/file.tsv
 
 # usage example: make build-dev
+# make load_genome_metadata-dev load_per_genome_stats-dev load_per_protein_stats-dev load_per_taxon_stats-dev

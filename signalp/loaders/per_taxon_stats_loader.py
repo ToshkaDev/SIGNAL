@@ -32,9 +32,9 @@ def load_domain_statistics_per_taxon(file_path=None, batch_size=1000):
         raise FileNotFoundError(f"File {file_path} does not exist")
 
     rows = []
-    # gtdb_taxonomy_rank to gtdb_taxonomy_last dict to check in the genome metadta table for the presense of corresponding taxon entries before loading data
+    # gtdb_taxonomy_rank to gtdb_taxonomy_last dict to check in the genome metadata table for the presense of corresponding taxon entries before loading data
     rank_to_last = defaultdict(set)
-
+        
     with file_path.open(newline='') as tsvfile:
         reader = csv.DictReader(tsvfile, delimiter='\t')
         for row_num, row in enumerate(reader, start=1):
@@ -50,19 +50,26 @@ def load_domain_statistics_per_taxon(file_path=None, batch_size=1000):
                 logger.warning(f"Skipping row {row_num} due to missing required fields: {row}")
                 continue
             
-            #taxonomy_lasts.add(gtdb_taxonomy_last)
             rank_to_last[gtdb_taxonomy_rank].add(gtdb_taxonomy_last)
             rows.append(row)
 
     # We are extracting GTDB taxonomy fields from the metadat table to ensure by comparision with this data that
     # all DomainStatisticsPerTaxon entries have taxons associated with them in the genome_metadata table (see below "Check existance" during loading data)
+    # In addition, we create lasttaxon_to_genomes dictionary to set many-to-many relationships
     taxons = set()
-    existing_entries = set()
+    existing_entries = []
+    lasttaxon_to_genomes = {}  # maps the last_taxon to a list of associated genomes  ([genomeobj1, genomeobj2, ...])
+    
     for rank, last_taxons in rank_to_last.items():
-        # to recreate the field name
+        # To recreate the field name
         rank="gtdb_" + rank
-        taxons.update(set(GenomeMetadata.objects.filter(**{f"{rank}__in": last_taxons}).values_list(rank, flat=True)))
-        existing_entries.update(set(DomainStatisticsPerTaxon.objects.filter(gtdb_taxonomy_last__in=last_taxons)))
+        existing_entries.extend(list(DomainStatisticsPerTaxon.objects.filter(gtdb_taxonomy_last__in=last_taxons)))
+        for last_taxon in last_taxons:
+            # Here we do dynamic filtering of fields using **{rank: last_taxon} expression
+            genomes_qs = GenomeMetadata.objects.filter(**{rank: last_taxon})
+            genomes_list = list(genomes_qs)
+            lasttaxon_to_genomes[last_taxon] = genomes_list
+            taxons.update(set(genomes_qs.values_list(rank, flat=True)))
 
     existing_map = {
         (obj.gtdb_taxonomy_string, obj.source, obj.protein_type, obj.domains, obj.domain_combination_type): obj
@@ -103,7 +110,7 @@ def load_domain_statistics_per_taxon(file_path=None, batch_size=1000):
 
     with transaction.atomic():
         for i in range(0, len(to_update), batch_size):
-            taxon_stat, created = DomainStatisticsPerTaxon.objects.bulk_update(
+            DomainStatisticsPerTaxon.objects.bulk_update(
                 to_update[i:i + batch_size],
                 fields=[
                     "gtdb_taxonomy_string",
@@ -122,6 +129,18 @@ def load_domain_statistics_per_taxon(file_path=None, batch_size=1000):
 
         for i in range(0, len(to_create), batch_size):
             DomainStatisticsPerTaxon.objects.bulk_create(to_create[i:i + batch_size])
+       
+        # Assign M2M relationships
+        assign_m2m_relationships(to_update, lasttaxon_to_genomes)
+        assign_m2m_relationships(to_create, lasttaxon_to_genomes)
+
 
     logger.info(f"Created {len(to_create)} new DomainStatisticsPerTaxon records")
     logger.info(f"Updated {len(to_update)} existing DomainStatisticsPerTaxon records")
+
+
+def assign_m2m_relationships(object_list, lasttaxon_to_genomes):
+    if object_list:
+        for obj in object_list:
+            genomeobjs = lasttaxon_to_genomes[obj.gtdb_taxonomy_last]
+            obj.genomes.set(genomeobjs)
