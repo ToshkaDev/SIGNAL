@@ -70,6 +70,7 @@ REST_FRAMEWORK = {
 #
 INSTALLED_APPS = [
     'signalp',
+    'django_filters',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
