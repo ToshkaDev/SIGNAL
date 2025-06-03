@@ -83,8 +83,8 @@ class DomainStatisticsPerGenome(models.Model):
     domains = models.TextField()
     domain_combination_type = models.TextField(blank=True, null=True, choices=DomainCombinationType.choices, db_index=True)
     count_raw = models.IntegerField(blank=True, null=True, db_index=True)
-    count_normalized_by_genome_size = models.DecimalField(max_digits=10, decimal_places=5, blank=True, null=True, db_index=True)
-    count_normalized_by_total_proteins = models.DecimalField(max_digits=10, decimal_places=5, blank=True, null=True, db_index=True)
+    count_normalized_by_genome_size = models.DecimalField(max_digits=11, decimal_places=9, blank=True, null=True, db_index=True)
+    count_normalized_by_total_proteins = models.DecimalField(max_digits=11, decimal_places=9, blank=True, null=True, db_index=True)
     search_vector = SearchVectorField(blank=True, null=True)
     objects = FullTextSearchQuerySet.as_manager()
 
@@ -103,9 +103,9 @@ class DomainStatisticsPerTaxon(models.Model):
     domains = models.TextField()
     domain_combination_type = models.TextField(blank=True, null=True, choices=DomainCombinationType.choices, db_index=True)
     count_raw = models.IntegerField(blank=True, null=True, db_index=True)
-    count_normalized_by_total_genomes = models.DecimalField(max_digits=10, decimal_places=5, blank=True, null=True, db_index=True)
-    count_normalized_by_genome_size_by_total_genomes = models.DecimalField(max_digits=10, decimal_places=5, blank=True, null=True, db_index=True)
-    count_normalized_by_total_proteins_by_total_genomes = models.DecimalField(max_digits=10, decimal_places=5, blank=True, null=True, db_index=True)
+    count_normalized_by_total_genomes = models.DecimalField(max_digits=11, decimal_places=7, blank=True, null=True, db_index=True)
+    count_normalized_by_genome_size_by_total_genomes = models.DecimalField(max_digits=11, decimal_places=9, blank=True, null=True, db_index=True)
+    count_normalized_by_total_proteins_by_total_genomes = models.DecimalField(max_digits=11, decimal_places=9, blank=True, null=True, db_index=True)
     search_vector = SearchVectorField(blank=True, null=True)
     objects = FullTextSearchQuerySet.as_manager()
 

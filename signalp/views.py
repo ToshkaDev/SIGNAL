@@ -5,8 +5,7 @@ from rest_framework.reverse import reverse
 from rest_framework import generics
 from signalp.models import GenomeMetadata, DomainStatisticsPerProtein, DomainStatisticsPerGenome, DomainStatisticsPerTaxon
 from signalp.serializers import GenomeMetadataSerializer, DomainStatisticsPerProteinSerializer, DomainStatisticsPerGenomeSerializer, DomainStatisticsPerTaxonSerializer
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
+from signalp.custom_filters import DomainStatisticsPerProteinFilter, DomainStatisticsPerGenomeFilter, DomainStatisticsPerTaxonFilter
 
 
 @api_view(['GET'])
@@ -22,6 +21,9 @@ def api_root(request, format=None):
 class GenomeMetadataList(generics.ListAPIView):
     queryset = GenomeMetadata.objects.all()
     serializer_class = GenomeMetadataSerializer
+    filterset_fields = ['genome_version', 'genome_accession', 'genome_size', 'protein_count']
+    search_fields = ['gtdb_kingdom', 'gtdb_phylum', 'gtdb_class', 'gtdb_order', 'gtdb_family', 'gtdb_genus', 'gtdb_species', 'ncbi_kingdom', 'ncbi_phylum',
+                     'ncbi_class', 'ncbi_order', 'ncbi_family', 'ncbi_genus', 'ncbi_species']
 
 class GenomeMetadataDetail(generics.RetrieveAPIView):
     queryset = GenomeMetadata.objects.all()
@@ -31,7 +33,7 @@ class GenomeMetadataDetail(generics.RetrieveAPIView):
 class DomainStatisticsPerProteinList(generics.ListAPIView):
     queryset = DomainStatisticsPerProtein.objects.all()
     serializer_class = DomainStatisticsPerProteinSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_class = DomainStatisticsPerProteinFilter
     filterset_fields = ['genome', 'genome_accession', 'ncbi_protein_accession', 'mist_protein_accession', 'source', 'protein_type']
     search_fields = ['domains', 'domain_architecture', 'sensors_or_regulators']
 
@@ -43,8 +45,8 @@ class DomainStatisticsPerProteinDetail(generics.RetrieveAPIView):
 class DomainStatisticsPerGenomeList(generics.ListAPIView):
     queryset = DomainStatisticsPerGenome.objects.all()
     serializer_class = DomainStatisticsPerGenomeSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['genome', 'genome_accession', 'count_raw', 'count_normalized_by_genome_size', 'count_normalized_by_total_proteins', 'domain_combination_type', 'source', 'protein_type']
+    filterset_class = DomainStatisticsPerGenomeFilter
+    filterset_fields = ['genome', 'genome_accession', 'domain_combination_type', 'source', 'protein_type']
     search_fields = ['domains']
 
 class DomainStatisticsPerGenomeDetail(generics.RetrieveAPIView):
@@ -55,7 +57,11 @@ class DomainStatisticsPerGenomeDetail(generics.RetrieveAPIView):
 class DomainStatisticsPerTaxonList(generics.ListAPIView):
     queryset = DomainStatisticsPerTaxon.objects.all()
     serializer_class = DomainStatisticsPerTaxonSerializer
+    filterset_class = DomainStatisticsPerTaxonFilter
+    filterset_fields = ['gtdb_taxonomy_last', 'genome_accession', 'source', 'protein_type']
+    search_fields = ['gtdb_taxonomy_last', 'domains']
 
 class DomainStatisticsPerTaxonDetail(generics.RetrieveAPIView):
     queryset = DomainStatisticsPerTaxon.objects.all()
     serializer_class = DomainStatisticsPerTaxonSerializer
+

@@ -23,8 +23,11 @@ up-dev:
 down-dev:
 	docker-compose -f docker-compose.dev.yml down
 
-migrate-dev:
+make_migrations-dev:
 	docker-compose -f docker-compose.dev.yml exec django python manage.py makemigrations signalp
+
+migrate-dev:
+	docker-compose -f docker-compose.dev.yml exec django python manage.py migrate
 
 load_genome_metadata-dev:
 	docker-compose -f docker-compose.dev.yml exec django python manage.py load_genome_metadata
