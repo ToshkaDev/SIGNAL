@@ -1,7 +1,6 @@
 import csv
 import logging
 from pathlib import Path
-from decimal import Decimal, InvalidOperation
 
 from django.db import transaction
 from signalp.models import DomainStatisticsPerProtein, GenomeMetadata
