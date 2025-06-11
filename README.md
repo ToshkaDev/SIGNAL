@@ -31,11 +31,11 @@ The application is built with Django 5.2.x and Django REST Framework, running in
 - Django >=5.2, <5.3  
 - djangorestframework  
 - psycopg2-binary (PostgreSQL client)  
-- ...others listed in [requirements.txt](./requirements.txt)
+- ...others listed in [requirements.dev.txt](./requirements.dev.txt)
 
 ## Getting Started
 - Build the Docker containers: `make build-dev`
-- Start the Django app and PostgreSQL database in development moder: `make up-dev`. The Django development server will be exposed at http://localhost:8000
+- Start the Django app and PostgreSQL database in development mode: `make up-dev`. The Django development server will be exposed at http://localhost:8000
 - Load sample data: `make load_data` (takes ~5-7 min). Go to http://localhost:8000 to explore the API
 - To stop the development server, run: `make down-dev`
 
