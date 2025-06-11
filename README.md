@@ -37,6 +37,7 @@ The application is built with Django 5.2.x and Django REST Framework, running in
 - Build the Docker containers: `make build-dev`
 - Start the Django app and PostgreSQL database in development mode: `make up-dev`. The Django development server will be exposed at http://localhost:8000
 - Load sample data: `make load_data` (takes ~5-7 min). Go to http://localhost:8000 to explore the API
+- To execute the tests, use: `make test`
 - To stop the development server, run: `make down-dev`
 
 ##  License
