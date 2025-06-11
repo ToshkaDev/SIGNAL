@@ -3,3 +3,6 @@ djangorestframework
 psycopg[binary]
 python-decouple
 django-filter
+pytest
+pytest-django
+factory_boy

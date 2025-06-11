@@ -24,8 +24,8 @@ down-dev:
 	docker-compose -f docker-compose.dev.yml down
 
 test:
-	docker-compose -f docker-compose.dev.yml exec django python manage.py test signalp
-	
+	docker-compose -f docker-compose.dev.yml exec django pytest
+
 make_migrations-dev:
 	docker-compose -f docker-compose.dev.yml exec django python manage.py makemigrations signalp
 
