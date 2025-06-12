@@ -53,7 +53,7 @@ def test_invalid_integer_field():
     with pytest.raises(ValueError):
         DomainStatisticsPerProteinFactory(
             protein_length="Cache",
-            domain_counts="GPD"
+            domain_counts="GPD",
         )
 
 @pytest.mark.django_db

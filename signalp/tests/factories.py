@@ -1,6 +1,6 @@
 import factory
-from signalp.models import GenomeMetadata, DomainStatisticsPerProtein, DomainStatisticsPerGenome, ProteinType, Source, DomainCombinationType
-
+from signalp.models import GenomeMetadata, DomainStatisticsPerProtein, DomainStatisticsPerGenome, DomainStatisticsPerTaxon
+from signalp.models import ProteinType, Source, DomainCombinationType
 
 class GenomeMetadataFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -56,3 +56,19 @@ class DomainStatisticsPerGenomeFactory(factory.django.DjangoModelFactory):
     count_raw = 2
     count_normalized_by_genome_size = 4.882401262588967e-07
     count_normalized_by_total_proteins = 0.0005752085130859936
+
+class DomainStatisticsPerTaxonFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = DomainStatisticsPerTaxon
+
+    gtdb_taxonomy_string = "Archaea;Halobacteriota;Methanomicrobia;Methanomicrobiales"
+    gtdb_taxonomy_last = "Methanomicrobiales"
+    gtdb_taxonomy_rank = "order"
+    source =  Source.MIST
+    protein_type = ProteinType.HK
+    domains = "PAS_Fold,PAS_Fold,Peripla_BP"
+    domain_combination_type = "superfamily_comb"
+    count_raw = 2
+    count_normalized_by_total_genomes = 0.044444444444444446
+    count_normalized_by_genome_size_by_total_genomes = 1.3871828395608659e-08
+    count_normalized_by_total_proteins_by_total_genomes = 1.4503720851844221e-05
