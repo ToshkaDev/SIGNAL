@@ -8,7 +8,7 @@ class DomainStatisticsPerProteinFilter(django_filters.FilterSet):
 
     class Meta:
         model = DomainStatisticsPerProtein
-        fields = ['protein_length__gte', 'protein_length__lte']
+        fields = ['protein_length__gte', 'protein_length__lte', 'genome', 'genome_accession', 'ncbi_protein_accession', 'mist_protein_accession', 'source', 'protein_type']
 
 class DomainStatisticsPerGenomeFilter(django_filters.FilterSet):
     count_raw__gte = django_filters.NumberFilter(field_name='count_raw', lookup_expr='gte')
@@ -20,7 +20,9 @@ class DomainStatisticsPerGenomeFilter(django_filters.FilterSet):
 
     class Meta:
         model = DomainStatisticsPerGenome
-        fields = ['count_raw__gte', 'count_raw__lte', 'count_normalized_by_genome_size__gte', 'count_normalized_by_genome_size__lte', 'count_normalized_by_total_proteins__gte', 'count_normalized_by_total_proteins__lte']
+        fields = ['count_raw__gte', 'count_raw__lte', 'count_normalized_by_genome_size__gte', 'count_normalized_by_genome_size__lte', 
+                  'count_normalized_by_total_proteins__gte', 'count_normalized_by_total_proteins__lte',
+                  'genome', 'genome_accession', 'domain_combination_type', 'source', 'protein_type']
 
 
 class DomainStatisticsPerTaxonFilter(django_filters.FilterSet):

@@ -34,7 +34,6 @@ class DomainStatisticsPerProteinList(generics.ListAPIView):
     queryset = DomainStatisticsPerProtein.objects.all()
     serializer_class = DomainStatisticsPerProteinSerializer
     filterset_class = DomainStatisticsPerProteinFilter
-    filterset_fields = ['genome', 'genome_accession', 'ncbi_protein_accession', 'mist_protein_accession', 'source', 'protein_type']
     search_fields = ['domains', 'domain_architecture', 'sensors_or_regulators']
 
 class DomainStatisticsPerProteinDetail(generics.RetrieveAPIView):
@@ -46,7 +45,6 @@ class DomainStatisticsPerGenomeList(generics.ListAPIView):
     queryset = DomainStatisticsPerGenome.objects.all()
     serializer_class = DomainStatisticsPerGenomeSerializer
     filterset_class = DomainStatisticsPerGenomeFilter
-    filterset_fields = ['genome', 'genome_accession', 'domain_combination_type', 'source', 'protein_type']
     search_fields = ['domains']
 
 class DomainStatisticsPerGenomeDetail(generics.RetrieveAPIView):
