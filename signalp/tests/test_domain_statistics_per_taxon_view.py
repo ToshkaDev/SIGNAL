@@ -34,7 +34,6 @@ def test_domain_stats_per_taxon_list_view(api_client):
     # Test filtering
     response_filtered = api_client.get("/taxon-stats/?count_normalized_by_total_genomes__gte=1.7468846442007515e-03")
     assert response_filtered.status_code == 200
-    print (response_filtered.data)
     assert len(response_filtered.data["results"]) == 1
     # count_normalized_by_genome_size field forces this 1.7468846442007515e-03 (set in the factory) to become this: 0.0017469
     assert response_filtered.data["results"][0]["count_normalized_by_total_genomes"] == '0.0017469'
@@ -43,7 +42,6 @@ def test_domain_stats_per_taxon_list_view(api_client):
     response_search = api_client.get("/taxon-stats/?search=Elusimicrobia")
     assert response_search.status_code == 200
     assert len(response_search.data["results"]) == 1
-    print (response_search.data)
     assert response_search.data["results"][0]["gtdb_taxonomy_string"] == "Bacteria;Elusimicrobiota;Elusimicrobia"
     # Test linked genome_metadata models
     assert len(response_search.data["results"][0]["genomes"]) == 2

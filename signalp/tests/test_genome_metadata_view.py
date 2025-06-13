@@ -13,7 +13,6 @@ def test_genome_metadata_list_view(api_client):
 
     response = api_client.get("/genomes/")
     assert response.status_code == 200
-    print (response.data)
     assert len(response.data["results"]) == 2
     assert all("genome_version" in item for item in response.data["results"])
 

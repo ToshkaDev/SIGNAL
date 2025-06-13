@@ -7,7 +7,7 @@ def api_client():
     return APIClient()
 
 @pytest.mark.django_db
-def test_genome_metadata_list_view(api_client):
+def test_domain_stats_per_protein_list_view(api_client):
     genome_metadata1 = GenomeMetadataFactory(genome_version="GCF_000009965.1")
     DomainStatisticsPerProteinFactory(genome=genome_metadata1, domain_architecture="Response_reg:4-115", mist_protein_accession="GCF_000009965.1-TK_RS031251")
     genome_metadata2 = GenomeMetadataFactory(genome_version="GCF_000015765.1")
@@ -21,7 +21,6 @@ def test_genome_metadata_list_view(api_client):
     # Test filtering
     response_filtered = api_client.get("/protein-stats/?genome=GCF_000015765.1")
     assert response_filtered.status_code == 200
-    print (response_filtered.data)
     assert len(response_filtered.data["results"]) == 1
     assert response_filtered.data["results"][0]["genome"] == "GCF_000015765.1"
 
@@ -32,7 +31,7 @@ def test_genome_metadata_list_view(api_client):
     assert response_search.data["results"][0]["domain_architecture"] == "Cache:2-205,GAF:210-400"
 
 @pytest.mark.django_db
-def test_genome_metadata_detail_view(api_client):
+def test_domain_stats_per_protein_detail_view(api_client):
     genome_metadata = GenomeMetadataFactory(genome_version="GCF_000015765.1")
     domain_stats_per_protein = DomainStatisticsPerProteinFactory(genome=genome_metadata)
 

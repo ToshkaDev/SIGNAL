@@ -7,7 +7,7 @@ def api_client():
     return APIClient()
 
 @pytest.mark.django_db
-def test_genome_metadata_list_view(api_client):
+def test_domain_stats_per_genome_list_view(api_client):
     genome_metadata1 = GenomeMetadataFactory(genome_version="GCF_000009965.1")
     DomainStatisticsPerGenomeFactory(genome=genome_metadata1, domains="PAS_3,PAS_4,PAS_9", count_normalized_by_genome_size=4.882401262588967e-07)
     genome_metadata2 = GenomeMetadataFactory(genome_version="GCF_000015765.1")
@@ -21,7 +21,6 @@ def test_genome_metadata_list_view(api_client):
     # Test filtering
     response_filtered = api_client.get("/genome-stats/?count_normalized_by_genome_size__lte=1.7468846442007515e-06")
     assert response_filtered.status_code == 200
-    print (response_filtered.data)
     assert len(response_filtered.data["results"]) == 1
     # count_normalized_by_genome_size field forces this 4.882401262588967e-07 (set in the factory) to become this: 0.000000488
     assert response_filtered.data["results"][0]["count_normalized_by_genome_size"] == '0.000000488'
@@ -33,7 +32,7 @@ def test_genome_metadata_list_view(api_client):
     assert response_search.data["results"][0]["domains"] == "GAF_2,GAF_3,PAS_3,PAS_4"
 
 @pytest.mark.django_db
-def test_genome_metadata_detail_view(api_client):
+def test_domain_stats_per_genome_detail_view(api_client):
     genome_metadata = GenomeMetadataFactory(genome_version="GCF_000015765.1")
     domain_stats_per_genome = DomainStatisticsPerGenomeFactory(genome=genome_metadata)
 
