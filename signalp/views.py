@@ -56,7 +56,6 @@ class DomainStatisticsPerTaxonList(generics.ListAPIView):
     queryset = DomainStatisticsPerTaxon.objects.all()
     serializer_class = DomainStatisticsPerTaxonSerializer
     filterset_class = DomainStatisticsPerTaxonFilter
-    filterset_fields = ['gtdb_taxonomy_last', 'genome_accession', 'source', 'protein_type']
     search_fields = ['gtdb_taxonomy_last', 'domains']
 
 class DomainStatisticsPerTaxonDetail(generics.RetrieveAPIView):

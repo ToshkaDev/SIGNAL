@@ -24,7 +24,6 @@ class DomainStatisticsPerGenomeFilter(django_filters.FilterSet):
                   'count_normalized_by_total_proteins__gte', 'count_normalized_by_total_proteins__lte',
                   'genome', 'genome_accession', 'domain_combination_type', 'source', 'protein_type']
 
-
 class DomainStatisticsPerTaxonFilter(django_filters.FilterSet):
     count_raw__gte = django_filters.NumberFilter(field_name='count_raw', lookup_expr='gte')
     count_raw__lte = django_filters.NumberFilter(field_name='count_raw', lookup_expr='lte')
@@ -39,4 +38,5 @@ class DomainStatisticsPerTaxonFilter(django_filters.FilterSet):
         model = DomainStatisticsPerTaxon
         fields = ['count_raw__gte', 'count_raw__lte', 'count_normalized_by_total_genomes__gte', 'count_normalized_by_total_genomes__lte', 
                   'count_normalized_by_genome_size_by_total_genomes__gte', 'count_normalized_by_genome_size_by_total_genomes__lte',
-                  'count_normalized_by_total_proteins_by_total_genomes__gte', 'count_normalized_by_total_proteins_by_total_genomes__lte']
+                  'count_normalized_by_total_proteins_by_total_genomes__gte', 'count_normalized_by_total_proteins_by_total_genomes__lte',
+                  'gtdb_taxonomy_last', 'source', 'protein_type', 'domain_combination_type']
